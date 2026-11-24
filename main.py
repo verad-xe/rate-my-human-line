@@ -25,8 +25,12 @@ def main() -> int:
     with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(LINE + "\n")
     # The scorer collects outputs as another user: leave the file readable.
-    os.chmod(path, 0o644)
-    os.chmod(out_dir, 0o755)
+    # (The output dir is grader-owned, so only chmod the file we created,
+    # and never fail the run over a chmod.)
+    try:
+        os.chmod(path, 0o644)
+    except OSError:
+        pass
     # Self-check: the gate wants UTF-8 text of 1 to 200 characters.
     with open(path, "r", encoding="utf-8") as f:
         text = f.read()
