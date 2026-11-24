@@ -34,6 +34,10 @@ def main() -> int:
     if not (1 <= len(stripped) <= 200):
         print(f"entry is {len(stripped)} characters, must be 1-200", file=sys.stderr)
         return 1
+    if "\n" in stripped or "\r" in stripped:
+        # The gate reads one line; a line break inside it would not be one line.
+        print("entry must be a single line", file=sys.stderr)
+        return 1
     if stripped != LINE:
         print("entry does not match the chosen line", file=sys.stderr)
         return 1
